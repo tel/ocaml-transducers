@@ -11,7 +11,7 @@ Library transducers
   FindlibName: transducers
   Pack:        true
   BuildTools:  ocamlbuild
-  Modules:     Std, Transducer, Stream, Types
+  Modules:     Std, Transducer, Stream, Types, Moore
 
 AlphaFeatures: ocamlbuild_more_args
 Document transducers_api

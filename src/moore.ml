@@ -10,14 +10,14 @@ type (_,_) t = T : ('a, 'b, 's) spec -> ('a, 'b) t
 let make spec = T spec
 let run (T {step; this; proj}) = fun a ->
   let this = step a this in
-  ( proj this; T { step; this; proj } )
+  ( proj this, T { step; this; proj } )
 
 type ('a, 'b) either = [ `Inl of 'a | `Inr of 'b ]
 
-let dimap f g { step; this; proj } =
+let dimap f g (T { step; this; proj }) =
   let step = fun a s -> step (f a) s in
   let proj = fun s -> g (proj s) in
-  { step; this; proj }
+  T { step; this; proj }
 
 let lmap f = dimap f (fun x -> x)
 let rmap g = dimap (fun x -> x) g
@@ -36,6 +36,6 @@ let ap (T fm) (T xm) =
 
 let extract (T m) = m.proj m.this
 
-let extend phi (T { step; this; proj } as m) =
+let extend phi (T { step; this; proj }) =
   T { step; this; proj = fun this -> phi (T {step; this; proj}) }
 
