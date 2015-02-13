@@ -1,0 +1,30 @@
+OASISFormat: 0.4
+Name:        transducers
+Version:     0.1
+Synopsis:    Transducers in OCaml
+Authors:     Joseph Abrahamson <me@jspha.com>
+License:     BSD-3-clause
+Plugins:     META (0.4), StdFiles (0.4), DevFiles (0.4)
+
+Library transducers
+  Path:        src
+  FindlibName: transducers
+  Pack:        true
+  BuildTools:  ocamlbuild
+  Modules:     Std, Transducer, Stream, Types
+
+AlphaFeatures: ocamlbuild_more_args
+Document transducers_api
+  Type: ocamlbuild (0.4)
+  BuildTools: ocamlbuild, ocamldoc
+
+  Title: API reference for Transducers
+  XOCamlbuildPath: .
+  XOCamlbuildExtraArgs:
+    "-docflags '-colorize-code -short-functors -charset utf-8'"
+  XOCamlbuildLibraries: transducers
+
+SourceRepository "ocaml-transducers"
+  Type:     git
+  Location: https://github.com/tel/ocaml-transducers
+  
