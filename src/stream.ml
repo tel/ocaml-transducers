@@ -77,3 +77,6 @@ let rec interleave xs ys =
   let tail2 = lazy (interleave (Lazy.force ys.tail) (Lazy.force xs.tail)) in
   let tail1 = lazy { head = ys.head; tail = tail2 } in
   { head = xs.head; tail = tail1 }
+
+let extract x = x.head
+let extend f s = map f (tails s)

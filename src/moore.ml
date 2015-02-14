@@ -21,6 +21,7 @@ let dimap f g (T { step; this; proj }) =
 
 let lmap f = dimap f (fun x -> x)
 let rmap g = dimap (fun x -> x) g
+let map  f = rmap f
 
 let pure a =
   let step = fun _ s -> s in

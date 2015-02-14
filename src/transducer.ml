@@ -1,18 +1,11 @@
 
-(* type ('a, 'b) t = { t : 'r . ('b, 'r) Fold.t -> ('a, 'r) Fold.t } *)
+type ('a, 'b) t = { t : 'r . ('b, 'r) Moore.t -> ('a, 'r) Moore.t }
 
-(* let id : ('a, 'a) t = { t = fun x -> x } *)
+let id = { t = fun x -> x }
+let compose { t = t1 } { t = t2 } = { t = fun z -> t1 (t2 z) }
 
-(* let ( >>> ) (t1 : ('a, 'x) t) (t2 : ('x, 'b) t) : ('a, 'b) t = *)
-(*   let { t = t1_ } = t1 in *)
-(*   let { t = t2_ } = t2 in *)
-(*   { t = fun z -> t2_ (t1_ z) } *)
-
-(* let map (f : 'a -> 'b) : ('a, 'b) t = *)
-(*   let open Fold in *)
-(*   let go = fun { step; this; proj } -> *)
-(*     let step = fun a s -> step (f a) s in *)
-(*     { step; this; proj } *)
-(*   in { t = go } *)
-
-(* let flatMap (f : 'a -> 'b Stream.t) *)
+let dimap f g { t = t } = { t = fun z -> Moore.lmap f (t (Moore.lmap g z)) }
+let lmap f = dimap f (fun x -> x)
+let rmap f = dimap (fun x -> x) f
+let map f  = rmap f
+let arr f  = { t = fun z -> Moore.lmap f z }

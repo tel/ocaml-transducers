@@ -1,3 +1,4 @@
+(** Common signatures. *)
 
 module type Functor = sig
   type 'a t
@@ -52,8 +53,60 @@ module type Profunctor = sig
   val rmap : ('b -> 'b_) -> ('a, 'b) t -> ('a, 'b_) t
 end
 
+module type Category = sig
+  type ('a, 'b) t
+  val id : ('a, 'a) t
+  val compose : ('a, 'x) t -> ('x, 'b) t -> ('a, 'b) t
+end
+
+module type Arrow = sig
+  include Profunctor
+  include Category with type ('a, 'b) t := ('a, 'b) t
+  val arr : ('a -> 'b) -> ('a, 'b) t
+end
+
+module type Strong = sig
+  include Profunctor
+  val first  : ('a, 'b) t -> ('a * 'x, 'b * 'x) t
+  val second : ('a, 'b) t -> ('x * 'a, 'x * 'b) t
+end
+
 module type ViewLeft = sig
   type 'a t
   val uncons : 'a t -> ('a * 'a t) option
   val cons : 'a -> 'a t -> 'a t
+end
+
+module type Semigroup = sig
+  type t
+  val mult : t -> t -> t
+end
+
+module type Monoid = sig
+  include Semigroup
+  val one : t
+end
+
+module type Foldable = sig
+  type 'a t
+  type m
+  val crush : ('a -> m) -> ('a t -> m)
+end
+
+module type Traversable = sig
+  type 'a t
+  type 'a f
+  val traverse : ('a -> 'b f) -> ('a t -> 'b t f)
+end
+
+module type Foldable1 = sig
+  type ('e, 'a) t
+  type m
+  val crush : ('a -> m) -> (('e, 'a) t -> m)
+end
+
+module type Traversable1 = sig
+  type ('e, 'a) t
+  type 'a f
+  val traverse : ('a -> 'b f) -> (('e, 'a) t -> ('e, 'b) t f)
 end

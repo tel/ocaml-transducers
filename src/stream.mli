@@ -5,7 +5,6 @@
 
 *)
 
-(** Abstract. *)
 type 'a t
 
 (** {1 Introduction} *)
@@ -15,7 +14,6 @@ val pure : 'a -> 'a t
 val ints : int t
 val iterate : ('a -> 'a) -> 'a -> 'a t
 val tabulate : (int -> 'a) -> 'a t
-
 
 (** {1 Elimination} *)
     
@@ -33,16 +31,6 @@ val filter : ('a -> bool) -> 'a t -> 'a t
 val inits : 'a t -> 'a list t
 val tails : 'a t -> 'a t t
 
-(** {1 View from the left} *)
-  
-val uncons : 'a t -> ('a * 'a t) option
-val cons : 'a -> 'a t -> 'a t
-
-(** {1 Functor, Applicative} *)
-    
-val map : ('a -> 'b) -> 'a t -> 'b t
-val ap : ('a -> 'b) t -> 'a t -> 'b t
-
 (** {1 Merges} *)
 
 val zip_with : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
@@ -50,3 +38,10 @@ val unzip_with : ('a -> 'b * 'c) -> 'a t -> 'b t * 'c t
 
 (** Acts as a semigroup product. *)
 val interleave : 'a t -> 'a t -> 'a t
+
+(** {1 Included signatures} *)
+    
+include Types.ViewLeft    with type 'a t := 'a t
+include Types.Functor     with type 'a t := 'a t
+include Types.Applicative with type 'a t := 'a t
+include Types.Comonad     with type 'a t := 'a t
